@@ -1,0 +1,20 @@
+{
+  "name": "G-Drive3.0",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@^0.4.1",
+    "ethers": "^6.9.0",
+    "hardhat": "^2.19.2",
+    "hardhat-deploy": "^0.11.44"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  },
+  "scripts": {
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test",
+    "test:sepolia": "npx hardhat test --network sepolia",
+    "deploy": "npx hardhat deploy",
+    "deploy:sepolia": "npx hardhat deploy --network sepolia"
+  }
+}
