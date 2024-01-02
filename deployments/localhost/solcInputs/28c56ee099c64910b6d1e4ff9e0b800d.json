@@ -1,0 +1,35 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/Upload.sol": {
+      "content": "/**\n * Pragma statements\n * Import statements\n * Events\n * Errors\n * Interfaces\n * Libraries\n * Contracts\n *\n * inside contracts pattern\n * Type declarations\n * State variables\n * Events\n * Errors\n * Modifiers\n * Functions\n */\n\n// SPDX-License-Identifier: MIT\npragma solidity ^0.8.17;\n\ncontract Upload {\n  struct Access {\n    address user;\n    bool access; //true or false\n  }\n  mapping(address => string[]) value;\n  mapping(address => mapping(address => bool)) ownership;\n  mapping(address => Access[]) accessList;\n  mapping(address => mapping(address => bool)) previousData;\n\n  event Added(string indexed url);\n\n  function add(address _user, string memory url) external {\n    value[_user].push(url);\n    emit Added(url);\n  }\n\n  function allow(address user) external {\n    //def\n    ownership[msg.sender][user] = true;\n    if (previousData[msg.sender][user]) {\n      for (uint i = 0; i < accessList[msg.sender].length; i++) {\n        if (accessList[msg.sender][i].user == user) {\n          accessList[msg.sender][i].access = true;\n        }\n      }\n    } else {\n      accessList[msg.sender].push(Access(user, true));\n      previousData[msg.sender][user] = true;\n    }\n  }\n\n  function disallow(address user) public {\n    ownership[msg.sender][user] = false;\n    for (uint i = 0; i < accessList[msg.sender].length; i++) {\n      if (accessList[msg.sender][i].user == user) {\n        accessList[msg.sender][i].access = false;\n      }\n    }\n  }\n\n  function display(address _user) external view returns (string[] memory) {\n    require(_user == msg.sender || ownership[_user][msg.sender], \"You don't have access\");\n    return value[_user];\n  }\n\n  function shareAccess(address user) public view returns (Access[] memory) {\n    return accessList[user];\n  }\n}\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": false,
+      "runs": 200
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

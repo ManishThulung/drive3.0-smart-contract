@@ -29,8 +29,11 @@ contract Upload {
   mapping(address => Access[]) accessList;
   mapping(address => mapping(address => bool)) previousData;
 
+  event Added(string indexed url);
+
   function add(address _user, string memory url) external {
     value[_user].push(url);
+    emit Added(url);
   }
 
   function allow(address user) external {
